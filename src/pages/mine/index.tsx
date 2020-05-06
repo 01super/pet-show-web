@@ -1,20 +1,20 @@
 import Taro, { useState, FC } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Navigator } from '@tarojs/components'
 import User from '../../components/user'
 import Login from '../../components/login'
 import './index.less'
 
 const  Mine: FC = () => {
   const [isLogin, setIsLogin] = useState(Taro.getStorageSync('userInfo') ? true : false)
-  const [num, setNum] = useState(1)
   return (
     <View className='mine page'>
-      <View onClick={()=>setNum(num+1)}>{num}</View>
       <View className='login'>
-        {isLogin ? <User /> : <Login setIsLogin={setIsLogin} />}
+        {false ? <User /> : <Login setIsLogin={setIsLogin} />}
       </View>
-      <View>
-        <Text>Mine</Text>
+      <View className='menu'>
+        <Navigator className='menu-item'>我的帖子</Navigator>
+        <Navigator className='menu-item'>精选</Navigator>
+        <Navigator className='menu-item'>设置</Navigator>
       </View>
     </View>
   )

@@ -28,22 +28,22 @@ class App extends Component {
     window: {
       backgroundTextStyle: "light",
       navigationBarBackgroundColor: "#fff",
-      // navigationBarTitleText: "WeChat",
+      navigationBarTitleText: "萌宠秀",
       navigationBarTextStyle: "black"
-    }, 
+    },
     tabBar: {
       list: [
         {
           pagePath: 'pages/index/index',
           text: '首页',
-          iconPath: './images/home.png',
-          selectedIconPath: './images/home.png'
+          iconPath: './assets/img/home.png',
+          selectedIconPath: './assets/img/home-active.png'
         },
         {
           pagePath: 'pages/mine/index',
           text: '我的',
-          iconPath: './images/mine.png',
-          selectedIconPath: './images/mine.png'
+          iconPath: './assets/img/user.png',
+          selectedIconPath: './assets/img/user-active.png'
         },
       ]
     }
