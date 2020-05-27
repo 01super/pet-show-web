@@ -1,7 +1,7 @@
 import Taro, { useState, FC } from '@tarojs/taro'
 import { View, Navigator } from '@tarojs/components'
-import User from '../../components/user'
-import Login from '../../components/login'
+import User from './user'
+import Login from './login'
 import './index.less'
 
 const  Mine: FC = () => {
@@ -9,7 +9,7 @@ const  Mine: FC = () => {
   return (
     <View className='mine page'>
       <View className='login'>
-        {false ? <User /> : <Login setIsLogin={setIsLogin} />}
+        {isLogin ? <User /> : <Login setIsLogin={setIsLogin} />}
       </View>
       <View className='menu'>
         <Navigator className='menu-item'>我的帖子</Navigator>

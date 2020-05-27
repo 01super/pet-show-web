@@ -24,7 +24,7 @@ class App extends Component {
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
    */
   config: Config = {
-    pages: ["pages/index/index","pages/mine/index"],
+    pages: ["pages/index/index", "pages/mine/index", "pages/publish/index"],
     window: {
       backgroundTextStyle: "light",
       navigationBarBackgroundColor: "#fff",
@@ -34,17 +34,17 @@ class App extends Component {
     tabBar: {
       list: [
         {
-          pagePath: 'pages/index/index',
-          text: '首页',
-          iconPath: './assets/img/home.png',
-          selectedIconPath: './assets/img/home-active.png'
+          pagePath: "pages/index/index",
+          text: "首页",
+          iconPath: "./assets/img/home.png",
+          selectedIconPath: "./assets/img/home-active.png"
         },
         {
-          pagePath: 'pages/mine/index',
-          text: '我的',
-          iconPath: './assets/img/user.png',
-          selectedIconPath: './assets/img/user-active.png'
-        },
+          pagePath: "pages/mine/index",
+          text: "我的",
+          iconPath: "./assets/img/user.png",
+          selectedIconPath: "./assets/img/user-active.png"
+        }
       ]
     }
   };

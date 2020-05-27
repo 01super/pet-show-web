@@ -13,7 +13,8 @@
       "singleline": {
         "delimiter": "semi",
         "requireLast": false
-      }
+      },
+      "quotes": ["off", "double"]
     }],
     "@typescript-eslint/explicit-function-return-type": 0,
     "@typescript-eslint/no-empty-function": ["warn"]

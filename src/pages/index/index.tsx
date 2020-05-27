@@ -1,9 +1,12 @@
-import { ComponentClass } from 'react'
-import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
-import { connect } from '@tarojs/redux'
-
-import { add, minus, asyncAdd } from '../../actions/counter'
+import {ComponentClass} from 'react'
+import Taro, {Component, Config} from '@tarojs/taro'
+import {AtImagePicker} from 'taro-ui'
+import {View, Button, Text, Navigator} from '@tarojs/components'
+import {connect} from '@tarojs/redux'
+import "../../../node_modules/taro-ui/dist/style/components/image-picker.scss";
+import "../../../node_modules/taro-ui/dist/style/components/icon.scss";
+import {add, minus, asyncAdd} from '../../actions/counter'
+import { upload } from '../../service/api'
 
 import './index.less'
 
@@ -39,23 +42,23 @@ interface Index {
   props: IProps
 }
 
-@connect(({ counter }) => ({
+@connect(({counter}) => ({
   counter
 }), (dispatch) => ({
-  add () {
+  add() {
     dispatch(add())
   },
-  dec () {
+  dec() {
     dispatch(minus())
   },
-  asyncAdd () {
+  asyncAdd() {
     dispatch(asyncAdd())
   }
 }))
 
 class Index extends Component {
 
-    /**
+  /**
    * 指定config的类型声明为: Taro.Config
    *
    * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
@@ -66,7 +69,29 @@ class Index extends Component {
     navigationBarTitleText: '首页'
   }
 
-  render () {
+  state = {
+    files: [],
+  }
+
+  fileChange(files) {
+    this.setState({
+      files
+    })
+  }
+
+  uploadFile() {
+    console.log(this.state.files)
+    Taro.uploadFile({
+      url: upload,
+      name: 'img',
+      filePath: this.state.files[0].url
+    }).then(res => {
+      console.log(res)
+    })
+  }
+
+  render() {
+    const {files} = this.state
     return (
       <View className='index'>
         <Button className='add_btn' onClick={this.props.add}>+</Button>
@@ -74,6 +99,9 @@ class Index extends Component {
         <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>
         <View><Text>{this.props.counter.num}</Text></View>
         <View><Text>Hello, World</Text></View>
+        <AtImagePicker files={files} onChange={this.fileChange.bind(this)} />
+        <Button onClick={this.uploadFile.bind(this)}>上传</Button>
+        <Navigator url='/pages/publish/index'>发布</Navigator>
       </View>
     )
   }
