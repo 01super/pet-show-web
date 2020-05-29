@@ -1,12 +1,9 @@
 import {ComponentClass} from 'react'
 import Taro, {Component, Config} from '@tarojs/taro'
-import {AtImagePicker} from 'taro-ui'
 import {View, Button, Text, Navigator} from '@tarojs/components'
-import {connect} from '@tarojs/redux'
-import "../../../node_modules/taro-ui/dist/style/components/image-picker.scss";
-import "../../../node_modules/taro-ui/dist/style/components/icon.scss";
-import {add, minus, asyncAdd} from '../../actions/counter'
-import { upload } from '../../service/api'
+import TopicCard from './TopicCard'
+import { topic } from '../../service/api'
+import request from '../../service'
 
 import './index.less'
 
@@ -42,20 +39,6 @@ interface Index {
   props: IProps
 }
 
-@connect(({counter}) => ({
-  counter
-}), (dispatch) => ({
-  add() {
-    dispatch(add())
-  },
-  dec() {
-    dispatch(minus())
-  },
-  asyncAdd() {
-    dispatch(asyncAdd())
-  }
-}))
-
 class Index extends Component {
 
   /**
@@ -70,38 +53,24 @@ class Index extends Component {
   }
 
   state = {
-    files: [],
+    topicList: [],
   }
 
-  fileChange(files) {
-    this.setState({
-      files
-    })
-  }
-
-  uploadFile() {
-    console.log(this.state.files)
-    Taro.uploadFile({
-      url: upload,
-      name: 'img',
-      filePath: this.state.files[0].url
+  componentDidMount() {
+    request({
+      url: topic.queryList
     }).then(res => {
-      console.log(res)
+      if(res.code === 200) {
+        this.setState({ topicList: res.object})
+      }
     })
   }
 
   render() {
-    const {files} = this.state
+    const { topicList } = this.state
     return (
       <View className='index'>
-        <Button className='add_btn' onClick={this.props.add}>+</Button>
-        <Button className='dec_btn' onClick={this.props.dec}>-</Button>
-        <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>
-        <View><Text>{this.props.counter.num}</Text></View>
-        <View><Text>Hello, World</Text></View>
-        <AtImagePicker files={files} onChange={this.fileChange.bind(this)} />
-        <Button onClick={this.uploadFile.bind(this)}>上传</Button>
-        <Navigator url='/pages/publish/index'>发布</Navigator>
+        {topicList.map((topic => <TopicCard data={topic} />))}
       </View>
     )
   }

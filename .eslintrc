@@ -1,5 +1,5 @@
 {
-  "extends": ["taro", "plugin:@typescript-eslint/recommended"],
+  "extends": ["taro", "plugin:@typescript-eslint/recommended","prettier","prettier/@typescript-eslint"],
   "parser": "@typescript-eslint/parser",
   "rules": {
     "no-unused-vars": ["error", { "varsIgnorePattern": "Taro" }],

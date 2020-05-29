@@ -1,67 +1,88 @@
-import {request, getStorageSync, clearStorage, navigateTo} from '@tarojs/taro';
-import {baseUrl} from "../config";
-import HTTP_STATUS from './httpStatus';
+import {
+  request,
+  getStorageSync,
+  clearStorage,
+  navigateTo
+} from "@tarojs/taro";
+import { baseUrl } from "../config";
+import HTTP_STATUS from "./httpStatus";
 
 export const formatNumber = (n: number | string): string => {
-  n = n.toString()
-  return n[1] ? n : '0' + n
-}
+  n = n.toString();
+  return n[1] ? n : "0" + n;
+};
 
 export const formatTime = date => {
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-  const hour = date.getHours()
-  const minute = date.getMinutes()
-  const second = date.getSeconds()
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const second = date.getSeconds();
 
-  return [year, month, day].map(formatNumber).join('-') + ' ' + [hour, minute, second].map(formatNumber).join(':')
-}
+  return (
+    [year, month, day].map(formatNumber).join("-") +
+    " " +
+    [hour, minute, second].map(formatNumber).join(":")
+  );
+};
 
 const logError = (name: string, action: string, info?: string | object) => {
   if (!info) {
-    info = 'empty'
+    info = "empty";
   }
-  const time = formatTime(new Date())
-  if (typeof info === 'object') {
-    info = JSON.stringify(info)
+  const time = formatTime(new Date());
+  if (typeof info === "object") {
+    info = JSON.stringify(info);
   }
-  console.error(time, name, action, info)
+  console.error(time, name, action, info);
+};
+
+interface Response {
+  code: 200 | 400
+  list: object
+  msg: string
+  object: object
 }
 
-export default function (params: request.Option, method: keyof request.method = 'GET') {
-  const {url} = params
-  console.log(url.includes('http://') ? url : baseUrl + url)
+export default function(
+  params: request.Option,
+) {
+  let { url, method = 'GET', header = {} } = params;
+  if(method === 'POST') {
+    header['content-type'] = 'application/x-www-form-urlencoded'
+  } else {
+    header['content-type'] = 'application/jso'
+  }
+  const token = getStorageSync("token")
+  if (token) header['authorize'] = token;
+  if(!url.includes("http://")) url = baseUrl + url
   const option: request.Option = {
     ...params,
-    url: url.includes('http://') ? url : baseUrl + url,
-    method: params.method || method,
-    header: {
-      'content-type': 'application/json',
-      ...params.header,
-      token: getStorageSync('token') || ''
-    },
-    success(res) {
-      if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
-        return logError('api', '请求资源不存在')
-      } else if (res.statusCode === HTTP_STATUS.BAD_GATEWAY) {
-        return logError('api', '服务端出现了问题')
-      } else if (res.statusCode === HTTP_STATUS.FORBIDDEN) {
-        return logError('api', '没有权限访问')
-      } else if (res.statusCode === HTTP_STATUS.AUTHENTICATE) {
-        clearStorage()
-        navigateTo({
-          url: '/pages/login/index'
-        })
-        return logError('api', '请先登录')
-      } else if (res.statusCode === HTTP_STATUS.SUCCESS) {
-        return res.data
-      }
-    },
-    fail(err) {
-      console.error(err)
-    }
-  }
+    url,
+    method,
+    header
+  };
   return request(option)
+    .then((res) => {
+      console.log('res11: ', res);
+      if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
+        logError("api", "请求资源不存在");
+      } else if (res.statusCode === HTTP_STATUS.BAD_GATEWAY) {
+        logError("api", "服务端出现了问题");
+      } else if (res.statusCode === HTTP_STATUS.FORBIDDEN) {
+        logError("api", "没有权限访问");
+      } else if (res.statusCode === HTTP_STATUS.AUTHENTICATE) {
+        clearStorage();
+        navigateTo({
+          url: "/pages/mine/index"
+        });
+        logError("api", "请先登录");
+      } 
+      return res.data as Response
+    })
+    .catch(err => {
+      logError("api", err);
+      return {} as Response
+    });
 }
-

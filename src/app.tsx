@@ -40,6 +40,12 @@ class App extends Component {
           selectedIconPath: "./assets/img/home-active.png"
         },
         {
+          pagePath: "pages/publish/index",
+          text: "发布",
+          iconPath: "./assets/img/home.png",
+          selectedIconPath: "./assets/img/home-active.png"
+        },
+        {
           pagePath: "pages/mine/index",
           text: "我的",
           iconPath: "./assets/img/user.png",

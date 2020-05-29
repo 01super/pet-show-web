@@ -7,6 +7,7 @@ function Home({ setIsLogin }) {
   const handleLogin = userInfo => {
     Taro.login({
       success(res) {
+        console.log('res: ', res);
         request({
           url: user.login,
           data: {
@@ -25,7 +26,10 @@ function Home({ setIsLogin }) {
               request({
                 url: user.updateUserInfo,
                 method: "PUT",
-                data: userInfo
+                data: userInfo,
+                header: {
+                  "content-type": "application/x-www-form-urlencoded"
+                },
               });
               setIsLogin(true);
             }
@@ -36,7 +40,6 @@ function Home({ setIsLogin }) {
   };
 
   const handleGetUserInfo = info => {
-    console.log(info);
     if (info.detail.errMsg === "getUserInfo:ok") {
       handleLogin(info.detail.userInfo);
     }
