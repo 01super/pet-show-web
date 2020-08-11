@@ -1,9 +1,10 @@
-import Taro from '@tarojs/taro'
+import React from 'react'
+import { getStorageSync } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 import './index.less'
 
 function Home() {
-  const userInfo = Taro.getStorageSync('userInfo')
+  const userInfo = getStorageSync('userInfo')
   return (
     <View className='user'>
       <Image className='avatar' src={userInfo.avatarUrl} />

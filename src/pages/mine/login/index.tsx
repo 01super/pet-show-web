@@ -1,11 +1,12 @@
-import Taro from "@tarojs/taro";
+import React from "react";
 import { View, Button } from "@tarojs/components";
+import { login, setStorageSync } from '@tarojs/taro'
 import { user } from "../../../service/api";
 import request from "../../../service";
 
 function Home({ setIsLogin }) {
   const handleLogin = userInfo => {
-    Taro.login({
+    login({
       success(res) {
         console.log('res: ', res);
         request({
@@ -20,9 +21,9 @@ function Home({ setIsLogin }) {
           method: "POST",
           success(loginRes) {
             console.log("loginRes", loginRes);
-            if (loginRes.code === 200) {
-              Taro.setStorageSync("userInfo", userInfo);
-              Taro.setStorageSync("token", loginRes.object);
+            if (loginRes.data.code === 200) {
+              setStorageSync("userInfo", userInfo);
+              setStorageSync("token", loginRes.data.object);
               request({
                 url: user.updateUserInfo,
                 method: "PUT",

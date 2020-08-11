@@ -1,48 +1,26 @@
 const config = {
-  projectName: 'pet',
-  date: '2020-4-16',
+  projectName: 'pet-show',
+  date: '2020-8-11',
   designWidth: 750,
   deviceRatio: {
-    '640': 2.34 / 2,
-    '750': 1,
-    '828': 1.81 / 2
+    640: 2.34 / 2,
+    750: 1,
+    828: 1.81 / 2
   },
   sourceRoot: 'src',
   outputRoot: 'dist',
-  babel: {
-    sourceMap: true,
-    presets: [
-      ['env', {
-        modules: false
-      }]
-    ],
-    plugins: [
-      'transform-decorators-legacy',
-      'transform-class-properties',
-      'transform-object-rest-spread',
-      ['transform-runtime', {
-          helpers: false,
-          polyfill: false,
-          regenerator: true,
-          moduleName: 'babel-runtime'
-        }
-      ]
-    ]
-  },
+  plugins: [],
   defineConstants: {
   },
+  copy: {
+    patterns: [
+    ],
+    options: {
+    }
+  },
+  framework: 'react',
   mini: {
     postcss: {
-      autoprefixer: {
-        enable: true,
-        config: {
-          browsers: [
-            'last 3 versions',
-            'Android >= 4.1',
-            'ios >= 8'
-          ]
-        }
-      },
       pxtransform: {
         enable: true,
         config: {
@@ -52,7 +30,7 @@ const config = {
       url: {
         enable: true,
         config: {
-          limit: 10240 // 设定转换尺寸上限
+          limit: 1024 // 设定转换尺寸上限
         }
       },
       cssModules: {
@@ -67,17 +45,10 @@ const config = {
   h5: {
     publicPath: '/',
     staticDirectory: 'static',
-    esnextModules: ['taro-ui'],
-    devServer: {port: 8080,host: "139.199.65.134"},
     postcss: {
       autoprefixer: {
         enable: true,
         config: {
-          browsers: [
-            'last 3 versions',
-            'Android >= 4.1',
-            'ios >= 8'
-          ]
         }
       },
       cssModules: {

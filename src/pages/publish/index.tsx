@@ -1,4 +1,5 @@
-import Taro, { useState, chooseImage } from '@tarojs/taro'
+import React, { useState } from 'react'
+import Taro, { chooseImage } from '@tarojs/taro'
 import { View, Button, Input, Text, Image, Textarea } from '@tarojs/components'
 import { topic, upload } from '../../service/api'
 import request from '../../service'
@@ -26,10 +27,9 @@ const Publish = () => {
   }
 
   const uploadFile = async () => {
-    const fileList = []
-    const promises = []
+    const promises: Promise<any>[] = []
     files.forEach(file => {
-      const _p = new Promise((resolve, reject) => {
+      const _p = new Promise((resolve) => {
         Taro.uploadFile({
           url: upload,
           name: 'file',
@@ -70,7 +70,7 @@ const Publish = () => {
     <View className='publish'>
       <View className='title'>
         <Text>标题：</Text>
-        <Input value={title} onInput={e => { setTitle(e.detail.value) }} maxLength={20} type='text' placeholder='请输入标题' />
+        <Input value={title} onInput={e => { setTitle(e.detail.value) }} maxlength={20} type='text' placeholder='请输入标题' />
       </View>
       <View className="pick-wrap">
         {files.map(file => <View className="img-wrap"><Image mode="aspectFit" className="img" src={file} /><Text className="close">x</Text></View>)}

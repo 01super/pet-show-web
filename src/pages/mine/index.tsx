@@ -1,11 +1,13 @@
-import Taro, { useState, FC } from '@tarojs/taro'
+import React, { useState, FC, useEffect } from 'react'
+import { getStorageSync } from '@tarojs/taro'
 import { View, Navigator } from '@tarojs/components'
 import User from './user'
 import Login from './login'
 import './index.less'
 
-const  Mine: FC = () => {
-  const [isLogin, setIsLogin] = useState(Taro.getStorageSync('userInfo') ? true : false)
+const Mine: FC = () => {
+  const [isLogin, setIsLogin] = useState(getStorageSync('userInfo') ? true : false)
+  useEffect(() => { console.log('xxx: ', getStorageSync('userInfo')) }, [])
   return (
     <View className='mine page'>
       <View className='login'>
@@ -18,10 +20,6 @@ const  Mine: FC = () => {
       </View>
     </View>
   )
-}
-
-Mine.config = {
-  navigationBarTitleText: '个人中心'
 }
 
 export default Mine

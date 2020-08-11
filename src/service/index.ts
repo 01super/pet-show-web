@@ -45,18 +45,18 @@ interface Response {
   object: object
 }
 
-export default function(
+export default function (
   params: request.Option,
 ) {
   let { url, method = 'GET', header = {} } = params;
-  if(method === 'POST') {
+  if (method === 'POST') {
     header['content-type'] = 'application/x-www-form-urlencoded'
   } else {
     header['content-type'] = 'application/jso'
   }
   const token = getStorageSync("token")
   if (token) header['authorize'] = token;
-  if(!url.includes("http://")) url = baseUrl + url
+  if (!url.includes("http://")) url = baseUrl + url
   const option: request.Option = {
     ...params,
     url,
@@ -78,7 +78,7 @@ export default function(
           url: "/pages/mine/index"
         });
         logError("api", "请先登录");
-      } 
+      }
       return res.data as Response
     })
     .catch(err => {
