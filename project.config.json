@@ -1,7 +1,7 @@
 {
   "miniprogramRoot": "./dist",
   "projectname": "pet-show",
-  "description": "萌丑秀",
+  "description": "萌宠秀",
   "appid": "wxdebcb16383e8509c",
   "setting": {
     "urlCheck": true,

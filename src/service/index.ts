@@ -2,7 +2,7 @@ import {
   request,
   getStorageSync,
   clearStorage,
-  navigateTo
+  navigateTo,
 } from "@tarojs/taro";
 import { baseUrl } from "../config";
 import HTTP_STATUS from "./httpStatus";
@@ -12,7 +12,7 @@ export const formatNumber = (n: number | string): string => {
   return n[1] ? n : "0" + n;
 };
 
-export const formatTime = date => {
+export const formatTime = (date) => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
@@ -38,34 +38,24 @@ const logError = (name: string, action: string, info?: string | object) => {
   console.error(time, name, action, info);
 };
 
-interface Response {
-  code: 200 | 400
-  list: object
-  msg: string
-  object: object
-}
-
-export default function (
-  params: request.Option,
-) {
-  let { url, method = 'GET', header = {} } = params;
-  if (method === 'POST') {
-    header['content-type'] = 'application/x-www-form-urlencoded'
+export default function (params: request.Option): Promise<Response> {
+  let { url, method = "GET", header = {} } = params;
+  if (method === "POST") {
+    header["content-type"] = "application/x-www-form-urlencoded";
   } else {
-    header['content-type'] = 'application/jso'
+    header["content-type"] = "application/json";
   }
-  const token = getStorageSync("token")
-  if (token) header['authorize'] = token;
-  if (!url.includes("http://")) url = baseUrl + url
+  const token = getStorageSync("token");
+  if (token) header["authorize"] = token;
+  if (!url.includes("http://")) url = baseUrl + url;
   const option: request.Option = {
     ...params,
     url,
     method,
-    header
+    header,
   };
   return request(option)
     .then((res) => {
-      console.log('res11: ', res);
       if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
         logError("api", "请求资源不存在");
       } else if (res.statusCode === HTTP_STATUS.BAD_GATEWAY) {
@@ -75,14 +65,14 @@ export default function (
       } else if (res.statusCode === HTTP_STATUS.AUTHENTICATE) {
         clearStorage();
         navigateTo({
-          url: "/pages/mine/index"
+          url: "/pages/mine/index",
         });
         logError("api", "请先登录");
       }
-      return res.data as Response
+      return res.data as Response;
     })
-    .catch(err => {
+    .catch((err) => {
       logError("api", err);
-      return {} as Response
+      return {} as Response;
     });
 }

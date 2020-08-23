@@ -1,35 +1,35 @@
-import React, { Component } from 'react'
-import { View } from '@tarojs/components'
-import TopicCard from './TopicCard'
-import { topic } from '../../service/api'
-import request from '../../service'
-import './index.less'
+import React, { useState, useEffect } from "react";
+import { usePullDownRefresh } from "@tarojs/taro";
+import { View } from "@tarojs/components";
+import TopicCard from "./TopicCard";
+import { queryTopicList } from "../../service/api";
+import "./index.less";
 
-class Index extends Component {
+const Index: React.FC = () => {
+  const [topicList, setTopicList] = useState<Topic[]>([]);
 
-  state = {
-    topicList: [],
-  }
+  const queryData = async () => {
+    const res = await queryTopicList();
+    if (res.code === 200) {
+      setTopicList(res.object);
+    }
+  };
 
-  componentDidMount() {
-    request({
-      url: topic.queryList
-    }).then(res => {
-      if (res.code === 200) {
-        this.setState({ topicList: res.object })
-      }
-    })
-  }
+  useEffect(() => {
+    queryData();
+  }, []);
 
-  render() {
-    const { topicList } = this.state
-    return (
-      <View className='index'>
-        {topicList.map((topic => <TopicCard data={topic} />))}
-      </View>
-    )
-  }
-}
+  usePullDownRefresh(() => {
+    queryData();
+  });
 
+  return (
+    <View className="index">
+      {topicList.map((topic) => (
+        <TopicCard data={topic} />
+      ))}
+    </View>
+  );
+};
 
-export default Index 
+export default Index;

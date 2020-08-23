@@ -1,3 +1,3 @@
-export const baseUrl = 'http://139.199.65.134:8080'
+export const baseUrl = "https://52star.net";
 
-export default baseUrl
+export default baseUrl;
