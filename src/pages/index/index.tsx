@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { usePullDownRefresh } from "@tarojs/taro";
+import {
+  usePullDownRefresh,
+  onAppShow,
+  stopPullDownRefresh,
+  startPullDownRefresh,
+} from "@tarojs/taro";
 import { View } from "@tarojs/components";
 import TopicCard from "./TopicCard";
 import { queryTopicList } from "../../service/api";
@@ -12,6 +17,7 @@ const Index: React.FC = () => {
     const res = await queryTopicList();
     if (res.code === 200) {
       setTopicList(res.object);
+      console.log("res.object: ", res.object);
     }
   };
 
@@ -20,13 +26,16 @@ const Index: React.FC = () => {
   }, []);
 
   usePullDownRefresh(() => {
+    startPullDownRefresh();
+    console.log(9999);
     queryData();
+    stopPullDownRefresh();
   });
 
   return (
     <View className="index">
       {topicList.map((topic) => (
-        <TopicCard data={topic} />
+        <TopicCard data={topic} key={topic.userAvatarUrl} />
       ))}
     </View>
   );

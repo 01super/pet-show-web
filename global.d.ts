@@ -9,9 +9,8 @@ declare module "*.scss";
 declare module "*.sass";
 declare module "*.styl";
 
-// @ts-ignore
-declare const process: {
-  env: {
+declare namespace NodeJS {
+  interface ProcessEnv {
     TARO_ENV:
       | "weapp"
       | "swan"
@@ -22,9 +21,8 @@ declare const process: {
       | "quickapp"
       | "qq"
       | "jd";
-    [key: string]: any;
-  };
-};
+  }
+}
 
 interface Topic {
   isLike: string;

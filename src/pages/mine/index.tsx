@@ -1,5 +1,5 @@
 import React, { useState, FC } from "react";
-import { getStorageSync } from "@tarojs/taro";
+import { getStorageSync, clearStorageSync, showToast } from "@tarojs/taro";
 import { View, Navigator, Button } from "@tarojs/components";
 import User from "./user";
 import Login from "./login";
@@ -11,7 +11,13 @@ const Mine: FC = () => {
   );
 
   const logout = () => {
+    clearStorageSync();
     setIsLogin(false);
+    showToast({
+      title: "注销成功",
+      icon: "success",
+      duration: 1000,
+    });
   };
 
   return (

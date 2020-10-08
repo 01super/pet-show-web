@@ -1,22 +1,20 @@
 import React from "react";
 import { View, Button } from "@tarojs/components";
-import { login, setStorageSync } from '@tarojs/taro'
+import { login, setStorageSync } from "@tarojs/taro";
 import { user } from "../../../service/api";
 import request from "../../../service";
 
 function Home({ setIsLogin }) {
-  const handleLogin = userInfo => {
+  const handleLogin = (userInfo) => {
     login({
       success(res) {
-        console.log('res: ', res);
         request({
           url: user.login,
           data: {
-            code: res.code
-            // ...userInfo
+            code: res.code,
           },
           header: {
-            "content-type": "application/x-www-form-urlencoded"
+            "content-type": "application/x-www-form-urlencoded",
           },
           method: "POST",
           success(loginRes) {
@@ -29,18 +27,18 @@ function Home({ setIsLogin }) {
                 method: "PUT",
                 data: userInfo,
                 header: {
-                  "content-type": "application/x-www-form-urlencoded"
+                  "content-type": "application/x-www-form-urlencoded",
                 },
               });
               setIsLogin(true);
             }
-          }
+          },
         });
-      }
+      },
     });
   };
 
-  const handleGetUserInfo = info => {
+  const handleGetUserInfo = (info) => {
     if (info.detail.errMsg === "getUserInfo:ok") {
       handleLogin(info.detail.userInfo);
     }

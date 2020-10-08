@@ -1,6 +1,6 @@
 const config = {
-  projectName: 'pet-show',
-  date: '2020-8-11',
+  projectName: 'pet-show-app',
+  date: '2020-10-8',
   designWidth: 750,
   deviceRatio: {
     640: 2.34 / 2,

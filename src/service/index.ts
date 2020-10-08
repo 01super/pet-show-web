@@ -1,11 +1,12 @@
 import {
   request,
   getStorageSync,
-  clearStorage,
-  navigateTo,
+  clearStorageSync,
+  switchTab,
+  showToast,
 } from "@tarojs/taro";
-import { baseUrl } from "../config";
-import HTTP_STATUS from "./httpStatus";
+
+const baseUrl = "https://52star.net";
 
 export const formatNumber = (n: number | string): string => {
   n = n.toString();
@@ -55,21 +56,20 @@ export default function (params: request.Option): Promise<Response> {
     header,
   };
   return request(option)
-    .then((res) => {
-      if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
-        logError("api", "请求资源不存在");
-      } else if (res.statusCode === HTTP_STATUS.BAD_GATEWAY) {
-        logError("api", "服务端出现了问题");
-      } else if (res.statusCode === HTTP_STATUS.FORBIDDEN) {
-        logError("api", "没有权限访问");
-      } else if (res.statusCode === HTTP_STATUS.AUTHENTICATE) {
-        clearStorage();
-        navigateTo({
+    .then(({ data }) => {
+      console.log("res.statusCode: ", data);
+      if (data.code === 400) {
+        clearStorageSync();
+        switchTab({
           url: "/pages/mine/index",
         });
-        logError("api", "请先登录");
+        showToast({
+          title: "请先登录",
+          icon: "none",
+          duration: 1000,
+        });
       }
-      return res.data as Response;
+      return data as Response;
     })
     .catch((err) => {
       logError("api", err);
